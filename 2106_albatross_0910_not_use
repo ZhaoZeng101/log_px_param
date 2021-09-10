@@ -1,0 +1,280 @@
+#!/bin/sh
+#
+# @name Applied Aeronautics Albatross
+#
+# @type Plane A-Tail
+# @class Plane
+#
+# @output MAIN1 aileron right
+# @output MAIN2 aileron left
+# @output MAIN3 v-tail right
+# @output MAIN4 v-tail left
+# @output MAIN5 throttle
+# @output MAIN6 wheel
+# @output MAIN7 flaps right
+# @output MAIN8 flaps left
+#
+# @output AUX1 feed-through of RC AUX1 channel
+# @output AUX2 feed-through of RC AUX2 channel
+# @output AUX3 feed-through of RC AUX3 channel
+#
+# @maintainer Andreas Antener <andreas@uaventure.com>
+#
+# @board intel_aerofc-v1 exclude
+# @board bitcraze_crazyflie exclude
+#
+
+sh /etc/init.d/rc.fw_defaults
+
+if [ $AUTOCNF = yes ]
+then
+    ####################################
+    #battery power 
+    ####################################
+    param set BAT_CAPACITY -1
+    param set BAT_N_CELLS 4
+    param set BAT_V_EMPTY 3.5
+    param set COM_POWER_COUNT 0
+
+    ###################################
+    #thruttel  THR
+    ###################################
+    param set FW_THR_CRUISE 0.76
+    param set FW_THR_MIN 0.15
+    param set FW_THR_IDLE 0
+
+    
+	####################################
+    # Airspeed
+    ####################################
+    #param set CBRK_SUPPLY_CHK 894281
+    param set CBRK_AIRSPD_CHK 162128
+    param set FW_ARSP_MODE   1 
+    
+    param set FW_AIRSPD_MIN  26 # = 72 km/h
+    param set FW_GND_SPD_MIN 26
+    param set FW_AIRSPD_TRIM 35 # = 108 km/h
+    param set FW_AIRSPD_MAX  50 # = 180 km/h
+
+    ####################################
+    # The Main L1 Controller
+    ####################################
+    param set FW_L1_PERIOD 25 #units of meters
+
+    # Damping factor for L1 control (def = 0.75)
+    param set FW_L1_DAMPING 0.71
+
+    ####################################
+    # Pitch
+    ####################################
+
+    # Basic limits (def = +/- 35 deg)
+    param set FW_P_LIM_MAX  30
+    param set FW_P_LIM_MIN -30
+
+    param set FW_P_RMAX_NEG 70
+    param set FW_P_RMAX_POS 70
+
+
+
+    # Time Constant (def = 0.02s)
+    param set FW_P_TC 0.25
+    
+    # Pitch rate feed forward (def = 0.5 %/rad/sec)
+    param set FW_PR_FF 0.8
+    param set FW_PR_I  0.08
+    param set FW_PR_P  0.2
+    param set FW_PR_IMAX 0.3
+
+    ####################################
+    # Roll
+    ####################################
+
+    # Basic limits (def = 50 deg)
+    param set FW_R_LIM 21
+
+    # Roll rate upper limit (def = 70 deg/s)
+    param set FW_R_RMAX 70
+
+    # Roll Time Constant (def = 0.4 s)
+    param set FW_R_TC 0.4
+
+    # Roll rate feed forward (def = 0.5 %/rad/sec)
+    param set FW_RR_FF 1.0
+
+    param set FW_RR_I 0.1
+    # Roll rate proportional Gain (def = 0.05 %/rad/sec)
+    param set FW_RR_P 0.25
+    
+    # Roll Integrator Anti-Windup
+    param set FW_RR_IMAX 0.3
+
+    ##################################
+    #land state
+    #################################
+    param set LNDFW_AIRSPD_MAX 6
+    param set LNDFW_VEL_Z_MAX 2
+    param set LNDFW_VEL_XY_MAX 2
+    param set LNDFW_XYACC_MAX 3
+    param set FW_LND_ANG 25
+    param set FW_LND_FL_PMAX -20
+    param set FW_LND_FL_PMIN -30
+    param set FW_LND_FLALT 1
+    param set FW_LND_HVIRT 13
+    #param set FW_LND_TLALT 10
+    param set FW_LND_HHDIST 15
+    param set FW_THR_LND_MAX 0.5
+
+    ##################################
+    #lauch state
+    ##################################
+    param set RWTO_MAX_ROLL 10 
+    param set LAUN_ALL_ON 1
+    param set LAUN_CAT_A  8.5
+    param set LAUN_CAT_T  0.1
+    param set LAUN_CAT_PMAX 75
+
+    ##################################
+    #mission
+    ##################################
+    param set MIS_DIST_1WP 10000
+    param set MIS_DIST_WPS 10000
+    param set MIS_LTRMIN_ALT 100
+    param set MIS_TAKEOFF_ALT 100
+    param set COM_DISARM_PRFLT -1
+    param set COM_DISARM_LAND -1
+
+
+    ##################################
+    #mask
+    ##################################
+    param set CBRK_USB_CHK      197848
+    param set CBRK_IO_SAFETY    22027
+    param set CBRK_AIRSPD_CHK   162128
+    param set COM_POWER_COUNT   0
+    param set CBRK_SUPPLY_CHK   894281
+    param set COM_ARM_EKF_AB    0.01
+    param set COM_ARM_EKF_GB    0.0017
+    param set COM_HOME_H_T 20 
+    param set COM_HOME_V_T 20
+    param set COM_RC_LOSS_T 2
+    param set COM_TAKEOFF_ACT 1
+    param set FD_FAIL_P     0
+    param set FD_FAIL_R     0
+    param set COM_LKDOWN_TKO 0
+    #param set COM_VEL_FS_EVH 20
+    param set COM_DISARM_LAND -1
+    param set COM_DISARM_PRFLT -1
+    #param set COM_POS_FS_DELAY 10
+    #param set COM_POS_FS_EPH 20
+    #param set COM_POS_FS_EPV 30
+    #param set COM_VEL_FS_EVH 20
+
+    param set SER_TEL1_BAUD 115200
+
+    ##################################
+    #alt
+    ##################################
+    param set RTL_MIN_DIST 50
+    param set FW_CLMBOUT_DIFF 55
+    param set RWTO_NAV_ALT 50
+    param set MIS_LTRMIN_ALT 99
+    param set MIS_TAKEOFF_ALT 99
+    param set RTL_DESCEND_ALT 99
+    param set RTL_RETURN_ALT 99
+
+
+    ##################################
+    #nav
+    ##################################
+    param set NAV_RCL_ACT 0
+    param set NAV_FW_ALT_RAD 70
+    param set NAV_FW_ALTL_RAD 70
+    param set NAV_ACC_RAD 70
+    param set NAV_LOITER_RAD 140
+
+    #param set CBRK_VELPOSERR 201607
+    param set NAV_GPSF_LT   3600
+    param set NAV_GPSF_P    14
+    param set NAV_GPSF_R    10
+    param set NAV_GPSF_TR   0.75
+    #param set EKF2_FUSE_BETA 0
+
+    ##################################
+	param set FW_MAN_P_MAX 35
+	param set FW_MAN_R_MAX 35
+    
+    ##################################
+    # sink 
+    #################################
+    param set FW_T_CLMB_MAX 10
+    param set FW_T_SINK_MAX 15
+    param set FW_T_SINK_MIN 2
+
+    ###################################
+    #wheel and yaw
+    ##################################
+	param set FW_WR_FF 0.2
+	param set FW_WR_I 0.2
+	param set FW_WR_IMAX 0.8
+	param set FW_WR_P 1
+    param set FW_YR_P 0.2
+    param set FW_YR_I 0.1
+    param set FW_YR_IMAX 0.5
+    param set FW_YR_FF 0.8
+	param set FW_W_RMAX 0
+
+    ##################################
+    #gps req
+    #EKF2_REQ_EPH EKF2_REQ_EPV EK2_REQ_GPS_H
+    #EKF2_REQ_HDRIFT EKF2_REQ_PDOP EKF2_REQ_SACC 
+    #EKF2_REQ_VDRIFT
+    ##################################
+    #param set EKF2_GPS_CHECK 21
+    #param set EKF2_REQ_EPH 20
+    #param set EKF2_REQ_EPV 20
+    #param set EKF2_REQ_GPS_H 0.75
+    #param set EKF2_REQ_HDRIFT 1.0
+    #param set EKF2_REQ_NSATS 6
+    #param set EKF2_REQ_PDOP 3.75
+    #param set EKF2_REQ_SACC 1.5
+    #param set EKF2_REQ_VDRIFT 1.5
+
+    #param set COM_POS_FS_DELAY 5
+    #param set COM_POS_FS_EPH 20
+    #param set COM_POS_FS_EPV 40
+    #param set COM_POS_FS_PROB 1
+
+    param set SENS_BARO_RATE 10
+
+    #################################
+    param set FW_T_RLL2THR 15
+    param set FW_T_VERT_ACC 5
+    param set FW_T_SPD_OMEGA 1
+    #param set _HGT_OMEGA 
+    #param set COM_POS_FS_DELAY 15
+    param set FW_T_HRATE_FF 0.8
+    param set FW_T_HRATE_P 0.15
+    param set FW_T_INTEG_GAIN 0.08
+    param set IMU_ACCEL_CUTOFF 30
+    param set FW_THR_SLEW_MAX 0.3
+    param set MOT_SLEW_MAX 0.3
+    param set FW_L1_R_SLEW_MAX 90
+
+    param set FW_T_TIME_CONST 3
+    param set FW_T_THRO_CONST 5
+    param set FW_T_PTCH_DAMP  0
+    param set FW_T_THR_DAMP 0.8
+    #################################
+	# set disarmed value for the ESC
+	param set PWM_DISARMED 1000
+    param set PWM_MAIN_MIN1 700
+    param set PWM_MAIN_MIN2 700
+    param set PWM_MAIN_MAX1 2300
+    param set PWM_MAIN_MAX2 2300
+fi
+
+set MIXER AAVVTWFF
+
+# use PWM parameters for throttle channel
+set PWM_OUT 5
